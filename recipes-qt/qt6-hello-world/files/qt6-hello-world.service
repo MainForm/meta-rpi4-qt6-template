@@ -1,0 +1,14 @@
+[Unit]
+Description=Qt 6 HelloWorld demo
+After=systemd-user-sessions.service
+
+[Service]
+Type=simple
+Environment=QT_QPA_PLATFORM=linuxfb
+Environment=QT_QPA_GENERIC_PLUGINS=libinput
+ExecStart=/usr/bin/qt6-hello-world
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
