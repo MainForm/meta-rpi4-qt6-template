@@ -11,6 +11,7 @@ IMAGE_FEATURES:append = " ssh-server-openssh"
 IMAGE_INSTALL:append = " \
     packagegroup-core-boot \
     packagegroup-qt6-essentials \
+    qt6-hello-world \
 "
 
 # Qt 6 SDK support for building applications against this image.
