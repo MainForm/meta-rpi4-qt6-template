@@ -1,41 +1,111 @@
-This README file contains information on the contents of the meta-rpi4-qt6-template layer.
+meta-rpi4-qt6-template
+======================
 
-Please see the corresponding sections below for details.
+This layer provides a minimal Qt 6 image and example application for the
+Raspberry Pi 4 64-bit target.
+
+It is intended as a small starting point for framebuffer-based Qt 6
+applications on Yocto Project scarthgap.
+
 
 Dependencies
 ============
 
-  URI: <first dependency>
-  branch: <branch name>
+This layer depends on the following layers:
 
-  URI: <second dependency>
-  branch: <branch name>
+* poky/meta
+* meta-raspberrypi
+* meta-qt6
+* meta-openembedded/meta-oe
+* meta-openembedded/meta-python
+* meta-openembedded/meta-networking
 
-  .
-  .
-  .
+The layer metadata declares the direct layer dependencies below:
 
-Patches
-=======
-
-Please submit any patches against the meta-rpi4-qt6-template layer to the xxxx mailing list (xxxx@zzzz.org)
-and cc: the maintainer:
-
-Maintainer: XXX YYYYYY <xxx.yyyyyy@zzzzz.com>
-
-Table of Contents
-=================
-
-  I. Adding the meta-rpi4-qt6-template layer to your build
- II. Misc
+* core
+* raspberrypi
+* qt6-layer
 
 
-I. Adding the meta-rpi4-qt6-template layer to your build
-=================================================
+Provided Recipes
+================
 
-Run 'bitbake-layers add-layer meta-rpi4-qt6-template'
+rpi4-qt6-image
+--------------
 
-II. Misc
-========
+`rpi4-qt6-image` is a minimal bootable Raspberry Pi 4 image with:
 
---- replace with specific information about the meta-rpi4-qt6-template layer ---
+* Qt 6 runtime packages
+* OpenSSH server support
+* NetworkManager and Wi-Fi support
+* Fontconfig with DejaVu and Korean TrueType fonts
+* `qt6-hello-world` preinstalled
+* Qt 6 SDK generation support through `populate_sdk_qt6_base`
+
+Build the image:
+
+    source sources/poky/oe-init-build-env build-rpi4
+    bitbake rpi4-qt6-image
+
+Build the SDK:
+
+    source sources/poky/oe-init-build-env build-rpi4
+    bitbake rpi4-qt6-image -c populate_sdk
+
+
+qt6-hello-world
+---------------
+
+`qt6-hello-world` is a simple Qt Creator/CMake based Qt Widgets application.
+It is installed to:
+
+    /usr/bin/qt6-hello-world
+
+The recipe also installs and enables a systemd service:
+
+    qt6-hello-world.service
+
+The service starts the application after boot with the Linux framebuffer Qt
+platform plugin:
+
+    QT_QPA_PLATFORM=linuxfb
+    QT_QPA_GENERIC_PLUGINS=libinput
+
+Check the service on the target:
+
+    systemctl status qt6-hello-world
+
+Restart the application:
+
+    systemctl restart qt6-hello-world
+
+
+Layer Setup
+===========
+
+Add this layer to your build configuration:
+
+    bitbake-layers add-layer sources/meta-rpi4-qt6-template
+
+Make sure the Raspberry Pi 4 64-bit machine is selected:
+
+    MACHINE ??= "raspberrypi4-64"
+
+For HDMI displays that show TV-style margins or blurry framebuffer output, the
+Raspberry Pi firmware overscan margin can be disabled in `local.conf`:
+
+    DISABLE_OVERSCAN = "1"
+
+
+Notes
+=====
+
+The example application is intentionally small. Replace the source under
+`recipes-qt/qt6-hello-world/files/qt6-hello-world/` with a Qt Creator CMake
+project when using this layer as an application template.
+
+Do not commit Qt Creator local files or build outputs such as:
+
+* `CMakeLists.txt.user`
+* `build/`
+* `build-*`
