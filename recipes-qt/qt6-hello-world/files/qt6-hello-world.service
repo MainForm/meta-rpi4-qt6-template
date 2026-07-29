@@ -6,7 +6,7 @@ After=systemd-user-sessions.service
 Type=simple
 Environment=QT_QPA_PLATFORM=linuxfb
 Environment=QT_QPA_GENERIC_PLUGINS=libinput
-ExecStart=/usr/bin/qt6-hello-world
+ExecStart=/usr/bin/appqt6-hello-world
 Restart=on-failure
 RestartSec=2
 

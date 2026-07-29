@@ -10,7 +10,11 @@ SRC_URI = " \
 
 S = "${WORKDIR}/qt6-hello-world"
 
-DEPENDS += "qtbase"
+DEPENDS += " \
+    qtbase \
+    qtdeclarative \
+    qtdeclarative-native \
+"
 
 inherit qt6-cmake systemd
 
