@@ -34,3 +34,15 @@ IMAGE_INSTALL:append = " \
     ttf-dejavu-sans-mono \
     source-han-sans-kr-fonts \
 "
+
+# Utilities required by Qt Creator for remote device operations and application deployment.
+IMAGE_INSTALL:append = " \
+    coreutils \
+    rsync \
+"
+
+# Target-side components required for remote C++ and QML debugging with Qt Creator.
+IMAGE_INSTALL:append = " \
+    gdbserver \
+    qtdeclarative-plugins \
+"
